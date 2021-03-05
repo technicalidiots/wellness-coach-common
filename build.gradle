@@ -1,0 +1,57 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.3'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'eclipse'
+}
+
+jar.archiveName = "wellness-coach-common.jar"
+
+jar{
+	enabled = true
+}
+
+bootJar{
+	classifier = 'boot'
+}
+
+group = 'com.dev'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+
+
+def copyToLocations = ["../hannock-wellness/lib"]
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compile 'org.springframework.boot:spring-boot-starter-mail'
+	compile 'org.springframework.boot:spring-boot-starter-test'
+	compile 'org.springframework.boot:spring-boot-starter-web'
+	
+	compile 'org.springframework.boot:spring-boot-starter-security'
+	compile 'io.jsonwebtoken:jjwt:0.9.1'
+	
+		
+	// Log4j
+	compile group: 'org.apache.logging.log4j', name:'log4j-api',version:'2.8.2'
+	compile group: 'org.apache.logging.log4j', name:'log4j-core', version:'2.8.2'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+
+task buildCommon(dependsOn:[clean,jar]) doLast{
+	copyToLocations.each{destination ->
+		copy{
+			from "build/libs"
+			into destination
+		}
+	}	
+}
